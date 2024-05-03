@@ -9,7 +9,7 @@ class Program
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Initializing...");
+        Console.WriteLine("Initializing.....");
         Initialize();
         Menu();
     }
