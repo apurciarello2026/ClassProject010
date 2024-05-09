@@ -1,4 +1,6 @@
-﻿﻿namespace ClassProject003;
+﻿﻿using ClassProject010;
+
+namespace ClassProject003;
 
 class Program
 {
@@ -6,6 +8,12 @@ class Program
     private static List<Appointment> appointments;
     private static List<CustomerAppointment> customerAppointments;
     private static Customer authenticatedCustomer;
+
+    private static List<Doctor> doctors;
+
+    private static Doctor authenticatedDoctor;
+
+    //added doctor variable and authenticated doc 
 
     static void Main(string[] args)
     {
@@ -32,6 +40,10 @@ class Program
             Password = "9876"
         };
 
+        var d1 = new Doctor("Dr. Smith", "Cardiologist", "drsmith", "doctor123");
+        var d2 = new Doctor("Dr. Johnson", "Pediatrician", "drjohnson", "pass123");
+//added cardiologist and pediatrician
+
         var a1 = new Appointment();
         var a2 = new Appointment();
         var a3 = new Appointment();
@@ -54,6 +66,10 @@ class Program
         appointments.Add(a2);
         appointments.Add(a3);
 
+        doctors = new List<Doctor>();
+        doctors.doctorList.Add(d1);
+        doctors.doctorList.Add(d2);
+
     }
 
     static void Menu()
@@ -62,24 +78,44 @@ class Program
 
         while (!done)
         {
-            Console.WriteLine("Options: Login: 1, Logout: 2, Sign Up: 3, Appointments: 4, Quit: q");
+            Console.WriteLine("Options: Login: 1, Doctor Login: 2, Sign Up: 3, Appointments: 4, Logout: 5, Quit: q");
             Console.Write("Choice: ");
             string choice = Console.ReadLine();
 
             switch(choice)
             {
                 case "1":
-                    LoginMenu();
+                    CustomerLoginMenu();
                     break;
                 case "2":
-                    LogOutMenu();
+                    DoctorLoginMenu();
                     break;
                 case "3":
                     SignUpMenu();
                     break;
                 case "4":
-                    AppointmentsMenu();
+                    if(authenticatedCustomer != null || authenticatedDoctor != null)
+                    //makes sure customer or doctor is authenticated
+                    {
+                        if(authenticatedCustomer != null)
+                        {
+                            CustomerAppointmentsMenu();
+                        }
+                        else
+                        {
+                            DocotorAppointmentsMenu();
+                        }
+                        //determines whether it is customer or doc
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please log in first!");
+                        //if they are not authenticated, prompts user to log in
+                    }
                     break;
+                case "5":
+                    Logout();
+                    break;    
                 case "q":
                     done = true;
                     break;
@@ -93,7 +129,7 @@ class Program
 
     }
 
-    static void LoginMenu()
+    static void CustomerLoginMenu()
     {
         if(authenticatedCustomer == null)
         {
@@ -115,10 +151,34 @@ class Program
 
 
     }
+ static void DoctorLoginMenu()
+        {
+            if (authenticatedDoctor == null)
+            {
+                Console.Write("Enter your username: ");
+                string username = Console.ReadLine();
+                Console.Write("Enter your password: ");
+                string password = Console.ReadLine();
 
+                authenticatedDoctor = doctors.FirstOrDefault(doc => doc.Authenticate(username, password));
+                //finds doctor in list instead of using instance of doctor class
+                if (authenticatedDoctor != null)
+                {
+                    Console.WriteLine($"Welcome Dr. {authenticatedDoctor.Name}");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid username or password");
+                }
+            }
+        }
+
+        //added doctor log in menu
     static void LogOutMenu()
     {
         authenticatedCustomer = null;
+        authenticatedDoctor = null;
+        //added doctor signout 
         Console.WriteLine("Logged out!");
     }
 
@@ -145,7 +205,7 @@ class Program
         
     }
 
-    static void AppointmentsMenu()
+    static void CustomerAppointmentsMenu()
     {
         if (authenticatedCustomer == null)
         {
@@ -168,5 +228,16 @@ class Program
         }
         
     }
+     static void DoctorAppointmentsMenu()
+        {
+            if (authenticatedDoctor == null)
+            {
+                Console.WriteLine("Please log in first!");
+                return;
+            }
+
+            //doctor appointment menu
+        }
 
 }
+
