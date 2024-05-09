@@ -62,24 +62,44 @@ class Program
 
         while (!done)
         {
-            Console.WriteLine("Options: Login: 1, Logout: 2, Sign Up: 3, Appointments: 4, Quit: q");
+            Console.WriteLine("Options: Login: 1, Doctor Login: 2, Sign Up: 3, Appointments: 4, Logout: 5, Quit: q");
             Console.Write("Choice: ");
             string choice = Console.ReadLine();
 
             switch(choice)
             {
                 case "1":
-                    LoginMenu();
+                    CustomerLoginMenu();
                     break;
                 case "2":
-                    LogOutMenu();
+                    DoctorLoginMenu;
                     break;
                 case "3":
                     SignUpMenu();
                     break;
                 case "4":
-                    AppointmentsMenu();
+                    if(authenticatedCustomer != null || authenticatedDoctor != null)
+                    //makes sure customer or doctor is authenticated
+                    {
+                        if(authenticatedCustomer != null)
+                        {
+                            CustomerAppointmentsMenu();
+                        }
+                        else
+                        {
+                            DocotorAppointmentsMenu();
+                        }
+                        //determines whether it is customer or doc
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please log in first!");
+                        //if they are not authenticated, prompts user to log in
+                    }
                     break;
+                case "5":
+                    Logout();
+                    break;    
                 case "q":
                     done = true;
                     break;
@@ -119,6 +139,8 @@ class Program
     static void LogOutMenu()
     {
         authenticatedCustomer = null;
+        authenticatedDoctor = null;
+        //added doctor signout 
         Console.WriteLine("Logged out!");
     }
 
