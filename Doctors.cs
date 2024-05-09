@@ -1,6 +1,6 @@
 ﻿namespace ClassProject010;
 
-public class Doctors
+public class Doctor
 {
 // Properties
         public string Name { get; set; }
@@ -23,3 +23,4 @@ public class Doctors
             return Username == username && Password == password;
         }
 }
+
