@@ -1,6 +1,4 @@
-﻿﻿namespace ClassProject003;
-
-class Program
+﻿class Program
 {
     private static Customers customers;
     private static List<Appointment> appointments;
@@ -9,7 +7,7 @@ class Program
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Initializing.....");
+        Console.WriteLine("Initializing...");
         Initialize();
         Menu();
     }
@@ -44,129 +42,54 @@ class Program
         customers.customerList.Add(c1);
         customers.customerList.Add(c2);
 
-        customerAppointments = new List<CustomerAppointment>();
-        customerAppointments.Add(ca1);
-        customerAppointments.Add(ca2);
-        customerAppointments.Add(ca3);
+       patientAppointments = new List<PatientAppointment>();
+       patientAppointments.Add(ca1);
+       patientAppointments.Add(ca2);
+       patientAppointments.Add(ca3);
+       patientAppointments.Add(ca4);
 
-        appointments = new List<Appointment>();
-        appointments.Add(a1);
-        appointments.Add(a2);
-        appointments.Add(a3);
 
-    }
+       appointments = new List<Appointment>();
+       appointments.Add(a1);
+       appointments.Add(a2);
+       appointments.Add(a3);
+       appointments.Add(a4);
+   }
 
-    static void Menu()
+   static void ScheduleAppointment()   // Method to schedule an appointment and at which date and time.
+
+   {
+
+    Console.WriteLine("Please describe your symptoms:"); //This acts as the system that records whatever symptoms the patient records.
+    string symptoms = Console.ReadLine();
+
+    // Process the symptoms, such as saving them to a file or database.
+    Console.WriteLine("Symptoms recorded. Thank you!");
+
+    Console.Write("Enter the date for the appointment (MM/DD/YYYY): ");
+    DateTime date;
+    while (!DateTime.TryParse(Console.ReadLine(), out date)) 
     {
-        bool done = false;
-
-        while (!done)
-        {
-            Console.WriteLine("Options: Login: 1, Logout: 2, Sign Up: 3, Appointments: 4, Quit: q");
-            Console.Write("Choice: ");
-            string choice = Console.ReadLine();
-
-            switch(choice)
-            {
-                case "1":
-                    LoginMenu();
-                    break;
-                case "2":
-                    LogOutMenu();
-                    break;
-                case "3":
-                    SignUpMenu();
-                    break;
-                case "4":
-                    AppointmentsMenu();
-                    break;
-                case "q":
-                    done = true;
-                    break;
-                default:
-                    Console.WriteLine("Invalid command!");
-                    break;
-            }
-
-        }
-
-
+        Console.WriteLine("Invalid date entry. Please try again.");
+        Console.Write("Enter the date for the appointment (MM/DD/YYYY): ");
     }
 
-    static void LoginMenu()
+
+    Console.Write("Enter the time for the appointment (HH:MM AM/PM): ");
+    DateTime time;
+    while (!DateTime.TryParse(Console.ReadLine(), out time))
     {
-        if(authenticatedCustomer == null)
-        {
-            Console.Write("Enter your username: ");
-            string username = Console.ReadLine();
-            Console.Write("Enter your password: ");
-            string password = Console.ReadLine();
-
-            authenticatedCustomer = customers.Authenticate(username, password);
-            if (authenticatedCustomer != null)
-            {
-                Console.WriteLine($"Welcome {authenticatedCustomer.FirstName}");
-            }
-            else
-            {
-                Console.WriteLine("Invalid username or password");
-            }
-        }
-
-
+        Console.WriteLine("Invalid time format. Please try again.");
+        Console.Write("Enter the time for the appointment (HH:MM AM/PM): ");
     }
 
-    static void LogOutMenu()
-    {
-        authenticatedCustomer = null;
-        Console.WriteLine("Logged out!");
-    }
 
-    static void SignUpMenu()
-    {
-        Console.Write("First Name: ");
-        string firstname = Console.ReadLine();
-        Console.Write("Last Name: ");
-        string lastname = Console.ReadLine();
-        Console.Write("Username: ");
-        string username = Console.ReadLine();
-        Console.Write("Password: ");
-        string password = Console.ReadLine();
+    DateTime appointmentDateTime = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, 0);
+    Console.WriteLine($"Appointment scheduled successfully for {appointmentDateTime.ToString("MM/dd/yyyy hh:mm tt")}");
+    
+   }
 
-        var newCustomer = new Customer
-        {
-            FirstName = firstname,
-            LastName = lastname,
-            Username = username,
-            Password = password
-        };
-        customers.customerList.Add(newCustomer);
-        Console.WriteLine("Profile created!");
-        
-    }
-
-    static void AppointmentsMenu()
-    {
-        if (authenticatedCustomer == null)
-        {
-            Console.WriteLine("Please log in first!");
-            return;
-        }
-
-        var appointmentList = customerAppointments.Where(o => o.c.Username == authenticatedCustomer.Username);
-
-        if(appointmentList.Count() == 0)
-        {
-            Console.WriteLine("0 appointments found.");
-        }
-        else
-        {
-            foreach(var appointment in appointmentList)
-            {
-                Console.WriteLine(appointment.a.dateTime);
-            }
-        }
-        
-    }
+       
 
 }
+
